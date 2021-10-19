@@ -2,10 +2,8 @@ language: java
 
 jdk:
   - openjdk14
-
-env:
-  global:
-    - CODECOV_TOKEN="12dfc3c9-e719-45ef-95fe-c3b9122e91da"
+  
+sudo: false
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -16,3 +14,7 @@ notifications:
       - ifs3112@gmail.com
     on_success: never # default: change
     on_failure: always # default: always
+    
+    env:
+    global:
+    - CODECOV_TOKEN="12dfc3c9-e719-45ef-95fe-c3b9122e91da"
