@@ -57,7 +57,7 @@ public class SqlTracker implements Store {
     public boolean replace(int id, Item item) {
         boolean res = false;
         Timestamp timestampFromLDT = Timestamp.valueOf(item.getCreated());
-        try (PreparedStatement ps = cn.prepareStatement( "update items set name = ?, created = ? where id = ?")) {
+        try (PreparedStatement ps = cn.prepareStatement("update items set name = ?, created = ? where id = ?")) {
             ps.setString(1, item.getName());
             ps.setTimestamp(2, timestampFromLDT);
             ps.setInt(3, id);
@@ -71,7 +71,7 @@ public class SqlTracker implements Store {
     @Override
     public boolean delete(int id) {
         boolean res = false;
-        try (PreparedStatement ps = cn.prepareStatement( "DELETE FROM items WHERE id = ?")) {
+        try (PreparedStatement ps = cn.prepareStatement("DELETE FROM items WHERE id = ?")) {
             ps.setInt(1, id);
             res = ps.executeUpdate() > 0;
         } catch (SQLException throwables) {
