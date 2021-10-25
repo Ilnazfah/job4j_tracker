@@ -86,10 +86,7 @@ public class SqlTracker implements Store {
         try (PreparedStatement ps = cn.prepareStatement("select * from items")) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    LocalDateTime localDateTime = rs.getTimestamp("created").toLocalDateTime();
-                    items.add(new Item(rs.getInt("id"),
-                            rs.getString("name"),
-                            localDateTime));
+                    items.add(getItem(rs));
                 }
             }
         } catch (SQLException throwables) {
@@ -105,10 +102,7 @@ public class SqlTracker implements Store {
             ps.setString(1, key);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    LocalDateTime localDateTime = rs.getTimestamp("created").toLocalDateTime();
-                    items.add(new Item(rs.getInt("id"),
-                            rs.getString("name"),
-                            localDateTime));
+                    items.add(getItem(rs));
                 }
             }
         } catch (SQLException throwables) {
@@ -123,16 +117,20 @@ public class SqlTracker implements Store {
         try (PreparedStatement ps = cn.prepareStatement("select * from items where id = ?")) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    LocalDateTime localDateTime = rs.getTimestamp("created").toLocalDateTime();
-                    res = new Item(rs.getInt("id"),
-                            rs.getString("name"),
-                            localDateTime);
+                if (rs.next()) {
+                    res = getItem(rs);
                 }
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return res;
+    }
+
+    public Item getItem(ResultSet rs) throws SQLException {
+        LocalDateTime localDateTime = rs.getTimestamp("created").toLocalDateTime();
+        return new Item(rs.getInt("id"),
+                rs.getString("name"),
+                localDateTime);
     }
 }
